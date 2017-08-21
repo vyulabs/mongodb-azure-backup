@@ -33,6 +33,7 @@ AWS_ACCESS_KEY=
 AWS_SECRET_KEY=
 S3_REGION=
 S3_BUCKET=
+ARCHIVE_NAME=
 
 while getopts “ht:u:p:k:s:r:b:” OPTION
 do
@@ -62,7 +63,6 @@ do
     a)
       ARCHIVE_NAME=$OPTARG
       ;;
-
     ?)
       usage
       exit
