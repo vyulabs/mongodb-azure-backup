@@ -23,6 +23,7 @@ OPTIONS:
    -s      AWS Secret Key (required)
    -r      Amazon S3 region (required)
    -b      Amazon S3 bucket name (required)
+   -a      Amazon S3 archive name (required)
 EOF
 }
 
@@ -58,6 +59,10 @@ do
     b)
       S3_BUCKET=$OPTARG
       ;;
+    a)
+      ARCHIVE_NAME=$OPTARG
+      ;;
+
     ?)
       usage
       exit
@@ -65,7 +70,7 @@ do
   esac
 done
 
-if [[ -z $AWS_ACCESS_KEY ]] || [[ -z $AWS_SECRET_KEY ]] || [[ -z $S3_REGION ]] || [[ -z $S3_BUCKET ]]
+if [[ -z $AWS_ACCESS_KEY ]] || [[ -z $AWS_SECRET_KEY ]] || [[ -z $S3_REGION ]] || [[ -z $S3_BUCKET ]] || [[ -z $ARCHIVE_NAME ]]
 then
   usage
   exit 1
@@ -77,7 +82,7 @@ echo $DIR
 # Store the current date in YYYY-mm-DD-HHMMSS
 DATE=$(date -u "+%F-%H%M%S")
 FILE_NAME="backup-$DATE"
-ARCHIVE_NAME="$FILE_NAME.tar.gz"
+ARCHIVE_NAME="$ARCHIVE_NAME/$FILE_NAME.tar.gz"
 
 
 # Dump the database
