@@ -35,7 +35,7 @@ S3_REGION=
 S3_BUCKET=
 ARCHIVE_NAME=
 
-while getopts “ht:u:p:k:s:r:b:” OPTION
+while getopts “ht:u:p:k:s:r:b:a:” OPTION
 do
   case $OPTION in
     h)
