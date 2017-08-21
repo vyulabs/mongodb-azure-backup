@@ -1,7 +1,7 @@
 # Mongodb to Amazon s3 Backup Script
 
 ## Requirements
-
+* AWS CLI
 * Running mongod process
 * mongodump
 * mongo
