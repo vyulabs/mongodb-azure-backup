@@ -23,7 +23,7 @@ OPTIONS:
    -s      AWS Secret Key (required)
    -r      Amazon S3 region (required)
    -b      Amazon S3 bucket name (required)
-   -a      Amazon S3 archive name (required)
+   -a      Amazon S3 folder (required)
 EOF
 }
 
@@ -33,7 +33,7 @@ AWS_ACCESS_KEY=
 AWS_SECRET_KEY=
 S3_REGION=
 S3_BUCKET=
-ARCHIVE_NAME=
+FOLDER_NAME=
 
 while getopts “ht:u:p:k:s:r:b:a:” OPTION
 do
@@ -61,7 +61,7 @@ do
       S3_BUCKET=$OPTARG
       ;;
     a)
-      ARCHIVE_NAME=$OPTARG
+      FOLDER_NAME=$OPTARG
       ;;
     ?)
       usage
@@ -70,7 +70,7 @@ do
   esac
 done
 
-if [[ -z $AWS_ACCESS_KEY ]] || [[ -z $AWS_SECRET_KEY ]] || [[ -z $S3_REGION ]] || [[ -z $S3_BUCKET ]] || [[ -z $ARCHIVE_NAME ]]
+if [[ -z $AWS_ACCESS_KEY ]] || [[ -z $AWS_SECRET_KEY ]] || [[ -z $S3_REGION ]] || [[ -z $S3_BUCKET ]] || [[ -z $FOLDER_NAME ]]
 then
   usage
   exit 1
@@ -82,7 +82,7 @@ echo $DIR
 # Store the current date in YYYY-mm-DD-HHMMSS
 DATE=$(date -u "+%F-%H%M%S")
 FILE_NAME="backup-$DATE"
-ARCHIVE_NAME="$ARCHIVE_NAME/$FILE_NAME.tar.gz"
+ARCHIVE_NAME="$FILE_NAME.tar.gz"
 
 
 # Dump the database
@@ -114,4 +114,4 @@ curl -X PUT \
 --header "Content-MD5: $CONTENT_MD5" \
 --header "Authorization: AWS $AWS_ACCESS_KEY:$SIGNATURE" \
 --upload-file $DIR/backup/$ARCHIVE_NAME \
-https://$S3_BUCKET.s3-$S3_REGION.amazonaws.com/$ARCHIVE_NAME
+https://$S3_BUCKET.s3-$S3_REGION.amazonaws.com/$FOLDER_NAME/$ARCHIVE_NAME
