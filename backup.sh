@@ -81,7 +81,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo $DIR
 # Store the current date in YYYY-mm-DD-HHMM
 DATE=$(date -u "+%F-%H%M")
-FILE_NAME="backup-$DATE"
+FILE_NAME="$DATE"
 ARCHIVE_NAME="$FILE_NAME.tgz"
 
 
