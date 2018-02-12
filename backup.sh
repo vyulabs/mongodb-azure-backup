@@ -79,10 +79,10 @@ fi
 # Get the directory the script is being run from
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo $DIR
-# Store the current date in YYYY-mm-DD-HHMMSS
-DATE=$(date -u "+%F-%H%M%S")
+# Store the current date in YYYY-mm-DD-HHMM
+DATE=$(date -u "+%F-%H%M")
 FILE_NAME="backup-$DATE"
-ARCHIVE_NAME="$FILE_NAME.tar.gz"
+ARCHIVE_NAME="$FILE_NAME.tgz"
 
 
 # Dump the database
