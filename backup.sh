@@ -24,6 +24,7 @@ OPTIONS:
    -r      Amazon S3 region (required)
    -b      Amazon S3 bucket name (required)
    -a      Amazon S3 folder (required)
+   -f      Backup filename prefix (optional)
 EOF
 }
 
@@ -34,8 +35,10 @@ AWS_SECRET_KEY=
 S3_REGION=
 S3_BUCKET=
 FOLDER_NAME=
+FILE_NAME_PREFIX=
 
-while getopts “ht:u:p:k:s:r:b:a:” OPTION
+
+while getopts “ht:u:p:k:s:r:b:a:f:” OPTION
 do
   case $OPTION in
     h)
@@ -63,6 +66,9 @@ do
     a)
       FOLDER_NAME=$OPTARG
       ;;
+    f)
+      FILE_NAME_PREFIX=$OPTARG
+      ;;
     ?)
       usage
       exit
@@ -81,7 +87,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo $DIR
 # Store the current date in YYYY-mm-DD-HHMM
 DATE=$(date -u "+%F-%H%M")
-FILE_NAME="$DATE"
+FILE_NAME="$FILE_NAME_PREFIX$DATE"
 ARCHIVE_NAME="$FILE_NAME.tgz"
 
 
