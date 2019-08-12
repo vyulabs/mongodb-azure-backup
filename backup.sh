@@ -112,6 +112,9 @@ export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY"
 export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_KEY"
 
 
-/usr/bin/aws s3 cp $DIR/backup/$ARCHIVE_NAME s3://$S3_BUCKET/$FOLDER_NAME/$ARCHIVE_NAME --content-type application/tar+gzip
+# /usr/bin/aws s3 cp $DIR/backup/$ARCHIVE_NAME s3://$S3_BUCKET/$FOLDER_NAME/$ARCHIVE_NAME --content-type application/tar+gzip
+
+/usr/bin/az login --identity
+/usr/bin/az storage blob upload -f $DIR/backup/$ARCHIVE_NAME -n $ARCHIVE_NAME --account-name $S3_BUCKET -c $FOLDER_NAME
 
 rm $DIR/backup/$ARCHIVE_NAME
