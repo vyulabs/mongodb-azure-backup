@@ -19,9 +19,9 @@ This script dumps the current mongo database, tars it, then sends it to an Amazo
 OPTIONS:
    -u      Mongodb user (optional)
    -p      Mongodb password (optional)
-   -s      Secret Key (required)
-   -b      bucket name (required)
-   -a      folder (required)
+   -s      AWS Secret Key (required)
+   -b      Amazon S3 bucket name (required)
+   -a      Amazon S3 folder (required)
    -f      Backup filename prefix (optional)
 EOF
 }
@@ -97,9 +97,14 @@ rm -r $DIR/backup/$FILE_NAME
 
 # Send the file to the backup drive or S3
 
-export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_KEY"
 
-#/usr/bin/az login --identity
-/usr/bin/az storage blob upload -f $DIR/backup/$ARCHIVE_NAME -n $ARCHIVE_NAME --auth-mode key --account-key "${AWS_SECRET_ACCESS_KEY}" --account-name $S3_BUCKET -c $FOLDER_NAME
+# /usr/bin/az login --identity
+/usr/bin/az storage blob upload \
+  -f $DIR/backup/$ARCHIVE_NAME \
+  --auth-mode key \
+  --account-name $S3_BUCKET \
+  --account-key "$AWS_SECRET_KEY" \
+  -n $ARCHIVE_NAME \
+  -c $FOLDER_NAME
 
 rm $DIR/backup/$ARCHIVE_NAME
