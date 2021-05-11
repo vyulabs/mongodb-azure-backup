@@ -19,26 +19,22 @@ This script dumps the current mongo database, tars it, then sends it to an Amazo
 OPTIONS:
    -u      Mongodb user (optional)
    -p      Mongodb password (optional)
-   -k      AWS Access Key (required)
-   -s      AWS Secret Key (required)
-   -r      Amazon S3 region (required)
-   -b      Amazon S3 bucket name (required)
-   -a      Amazon S3 folder (required)
+   -s      Secret Key (required)
+   -b      bucket name (required)
+   -a      folder (required)
    -f      Backup filename prefix (optional)
 EOF
 }
 
 MONGODB_USER=
 MONGODB_PASSWORD=
-AWS_ACCESS_KEY=
 AWS_SECRET_KEY=
-S3_REGION=
 S3_BUCKET=
 FOLDER_NAME=
 FILE_NAME_PREFIX=
 
 
-while getopts “ht:u:p:k:s:r:b:a:f:” OPTION
+while getopts “ht:u:p:k:s:b:a:f:” OPTION
 do
   case $OPTION in
     h)
@@ -51,14 +47,8 @@ do
     p)
       MONGODB_PASSWORD=$OPTARG
       ;;
-    k)
-      AWS_ACCESS_KEY=$OPTARG
-      ;;
     s)
       AWS_SECRET_KEY=$OPTARG
-      ;;
-    r)
-      S3_REGION=$OPTARG
       ;;
     b)
       S3_BUCKET=$OPTARG
@@ -76,7 +66,7 @@ do
   esac
 done
 
-if [[ -z $AWS_ACCESS_KEY ]] || [[ -z $AWS_SECRET_KEY ]] || [[ -z $S3_REGION ]] || [[ -z $S3_BUCKET ]] || [[ -z $FOLDER_NAME ]]
+if [[ -z $AWS_SECRET_KEY ]] || [[ -z $S3_BUCKET ]] || [[ -z $FOLDER_NAME ]]
 then
   usage
   exit 1
@@ -107,14 +97,9 @@ rm -r $DIR/backup/$FILE_NAME
 
 # Send the file to the backup drive or S3
 
-
-export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY"
 export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_KEY"
 
-
-# /usr/bin/aws s3 cp $DIR/backup/$ARCHIVE_NAME s3://$S3_BUCKET/$FOLDER_NAME/$ARCHIVE_NAME --content-type application/tar+gzip
-
-/usr/bin/az login --identity
-/usr/bin/az storage blob upload -f $DIR/backup/$ARCHIVE_NAME -n $ARCHIVE_NAME --account-name $S3_BUCKET -c $FOLDER_NAME
+#/usr/bin/az login --identity
+/usr/bin/az storage blob upload -f $DIR/backup/$ARCHIVE_NAME -n $ARCHIVE_NAME --auth-mode key --account-key "${AWS_SECRET_ACCESS_KEY}" --account-name $S3_BUCKET -c $FOLDER_NAME
 
 rm $DIR/backup/$ARCHIVE_NAME
